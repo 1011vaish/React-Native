@@ -1,98 +1,68 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 
 const App = () => {
-  const [input, setInput] = useState('');
-  const [result, setResult] = useState('');
+  const [product, setProduct] = useState("");
+  const [cost, setCost] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [netBill, setNetBill] = useState(0);
+  const [payableAmount, setPayableAmount] = useState(0);
 
-  const handleButtonPress = (buttonPressed) => {
-    if (buttonPressed === '=') {
-      calculateResult();
-    } else if (buttonPressed === 'C') {
-      clearInput();
-    } else {
-      setInput(prevInput => prevInput + buttonPressed);
+  const calculateBill = () => {
+    const costValue = parseFloat(cost);
+    const quantityValue = parseInt(quantity);
+    if (isNaN(costValue) || isNaN(quantityValue) || quantityValue <= 0) {
+      alert("Please enter valid cost and quantity");
+      return;
     }
-  };
 
-  const calculateResult = () => {
-    try {
-      const evaluation = eval(input);
-      setResult(evaluation.toString());
-    } catch (error) {
-      setResult('Error');
-    }
-  };
+    const netBillValue = costValue * quantityValue;
+    const discount = netBillValue * 0.1;
+    const payableAmountValue = netBillValue - discount;
 
-  const clearInput = () => {
-    setInput('');
-    setResult('');
+    setNetBill(netBillValue);
+    setPayableAmount(payableAmountValue);
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Text style={styles.input}>{input}</Text>
+      <Text style={styles.title}>Bill Calculator</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Product Name"
+        value={product}
+        onChangeText={setProduct}
+      />
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Cost"
+        value={cost}
+        onChangeText={setCost}
+      />
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Quantity"
+        value={quantity}
+        onChangeText={setQuantity}
+      />
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Calculate Bill"
+          onPress={calculateBill}
+          color="#007BFF"
+        />
       </View>
       <View style={styles.resultContainer}>
-        <Text style={styles.result}>{result}</Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('7')}>
-          <Text style={styles.buttonText}>7</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('8')}>
-          <Text style={styles.buttonText}>8</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('9')}>
-          <Text style={styles.buttonText}>9</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('/')}>
-          <Text style={styles.buttonText}>/</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('4')}>
-          <Text style={styles.buttonText}>4</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('5')}>
-          <Text style={styles.buttonText}>5</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('6')}>
-          <Text style={styles.buttonText}>6</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('*')}>
-          <Text style={styles.buttonText}>*</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('1')}>
-          <Text style={styles.buttonText}>1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('2')}>
-          <Text style={styles.buttonText}>2</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('3')}>
-          <Text style={styles.buttonText}>3</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('-')}>
-          <Text style={styles.buttonText}>-</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('0')}>
-          <Text style={styles.buttonText}>0</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('.')}>
-          <Text style={styles.buttonText}>.</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('C')}>
-          <Text style={styles.buttonText}>C</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('+')}>
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.button, styles.equalButton]} onPress={() => handleButtonPress('=')}>
-          <Text style={[styles.buttonText, styles.equalButtonText]}>=</Text>
-        </TouchableOpacity>
+        <Text style={styles.resultLabel}>Net Bill:</Text>
+        <Text style={styles.resultText}>$ {netBill.toFixed(2)}</Text>
+        <Text style={styles.resultLabel}>Discount (10%):</Text>
+        <Text style={styles.resultText}>$ {(netBill * 0.1).toFixed(2)}</Text>
+        <Text style={styles.resultLabel}>Payable Amount:</Text>
+        <Text style={[styles.resultText, styles.payableAmount]}>
+          $ {payableAmount.toFixed(2)}
+        </Text>
       </View>
     </View>
   );
@@ -101,51 +71,60 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    padding: 20,
   },
-  inputContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    paddingRight: 20,
-    paddingBottom: 20,
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
   },
   input: {
-    fontSize: 40,
-  },
-  resultContainer: {
-    alignItems: 'flex-end',
-    paddingRight: 20,
-    paddingBottom: 10,
-  },
-  result: {
-    fontSize: 30,
-    color: 'gray',
+    width: "100%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: "#fff",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    width: "100%",
+    marginTop: 20,
   },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '25%',
-    height: 80,
-    backgroundColor: '#007BFF',
-    borderWidth: 1,
-    borderColor: '#fff',
+  resultContainer: {
+    marginTop: 30,
+    width: "100%",
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  buttonText: {
-    fontSize: 24,
-    color: '#fff',
+  resultLabel: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: "#333",
   },
-  equalButton: {
-    backgroundColor: '#28a745',
-    flex: 2,
+  resultText: {
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: "bold",
+    color: "#007BFF",
   },
-  equalButtonText: {
-    fontSize: 32,
+  payableAmount: {
+    color: "#28a745",
   },
 });
 
-export default App
+export default App;
