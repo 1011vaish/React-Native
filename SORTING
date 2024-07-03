@@ -1,0 +1,67 @@
+import React, { useState } from "react";
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+
+const App = () => {
+  const [valueA, setValueA] = useState("");
+  const [valueB, setValueB] = useState("");
+  const [valueC, setValueC] = useState("");
+  const [sortedValues, setSortedValues] = useState([]);
+
+  const sortValues = () => {
+    const values = [parseFloat(valueA), parseFloat(valueB), parseFloat(valueC)];
+    values.sort((a, b) => a - b);
+    setSortedValues(values);
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Enter value A"
+        value={valueA}
+        onChangeText={setValueA}
+      />
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Enter value B"
+        value={valueB}
+        onChangeText={setValueB}
+      />
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Enter value C"
+        value={valueC}
+        onChangeText={setValueC}
+      />
+      <Button title="Sort Values" onPress={sortValues} />
+      <Text style={styles.resultText}>
+        {sortedValues.length > 0 && `Sorted Values: ${sortedValues.join(", ")}`}
+      </Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  resultText: {
+    marginTop: 20,
+    fontSize: 18,
+    textAlign: "center",
+  },
+});
+
+export default App;
