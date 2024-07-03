@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
-
+//BILLING
 const App = () => {
   const [product, setProduct] = useState("");
   const [cost, setCost] = useState("");
