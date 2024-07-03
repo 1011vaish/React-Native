@@ -1,0 +1,42 @@
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+
+const Education = () => {
+  return (
+    <View style={styles.educationContainer}>
+      <Text style={styles.sectionTitle}>Education</Text>
+      <View style={styles.educationItem}>
+        <Text style={styles.degree}>BTech in Computer Science</Text>
+        <Text style={styles.institution}>SVIET</Text>
+        <Text style={styles.graduationYear}>2022-2026</Text>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  educationContainer: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  educationItem: {
+    marginBottom: 10,
+  },
+  degree: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  institution: {
+    fontSize: 16,
+  },
+  graduationYear: {
+    fontSize: 14,
+    fontStyle: "italic",
+  },
+});
+
+export default Education;
